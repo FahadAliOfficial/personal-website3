@@ -69,10 +69,36 @@ export default function Loader({ onComplete }: LoaderProps) {
             damping: 15,
             mass: 0.1,
           }}
-        />
-
-        {/* Animated Background Elements for completion state */}
-        <div className="absolute inset-0">
+        />        {/* Animated Background Elements for completion state */}
+        <div className="absolute inset-0">          {/* Optimized animated dots for completion - reduced from 50 to 25 */}
+          {Array.from({ length: 25 }, (_, i) => {
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const delay = Math.random() * 3;
+            const duration = 2 + Math.random() * 1.5; // Reduced duration
+            
+            return (
+              <motion.div
+                key={`completion-dot-${i}`}
+                className="absolute w-1 h-1 bg-white rounded-full"
+                style={{
+                  left: `${x}%`,
+                  top: `${y}%`,
+                }}
+                animate={{
+                  opacity: [0.2, 0.8, 0.2], // Reduced max opacity
+                  scale: [1, 1.5, 1], // Reduced scale
+                }}
+                transition={{
+                  duration: duration,
+                  repeat: Infinity,
+                  delay: delay,
+                  ease: "easeInOut",
+                }}
+              />
+            );
+          })}
+          
           <motion.div
             className="absolute top-1/3 left-1/3 w-40 h-40 bg-gradient-to-br from-white/3 to-gray-400/3 rounded-full blur-2xl"
             animate={{
@@ -150,7 +176,28 @@ export default function Loader({ onComplete }: LoaderProps) {
       />
 
       {/* Animated Background Elements */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0">        {/* Simplified floating particles - reduced from 15 to 8 */}
+        {Array.from({ length: 8 }, (_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-1 h-1 bg-white rounded-full opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0.1, 0.6, 0.1],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+        
         {/* Floating orbs */}
         <motion.div
           className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-white/5 to-gray-400/5 rounded-full blur-xl"
@@ -193,10 +240,41 @@ export default function Loader({ onComplete }: LoaderProps) {
             delay: 4,
           }}
         />
+          {/* Animated Grid Dots */}
+        <div className="absolute inset-0">          {/* Optimized grid dots - reduced from 200 to 60 */}
+          {Array.from({ length: 60 }, (_, i) => {
+            const x = (i % 12) * 8; // 12 dots per row, 8% spacing
+            const y = Math.floor(i / 12) * 10; // 5 rows, 10% spacing
+            const delay = Math.random() * 8; // Random delay between 0-8 seconds
+            const duration = 3 + Math.random() * 2; // Random duration between 3-5 seconds
+            const isBright = Math.random() > 0.85; // 15% chance for bright dots
+            
+            return (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full"
+                style={{
+                  left: `${x}%`,
+                  top: `${y + 10}%`,
+                }}
+                animate={{
+                  opacity: isBright ? [0.1, 0.9, 0.1] : [0.1, 0.4, 0.1],
+                  scale: isBright ? [1, 1.8, 1] : [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: duration,
+                  repeat: Infinity,
+                  delay: delay,
+                  ease: "easeInOut",
+                }}
+              />
+            );
+          })}
+        </div>
         
-        {/* Grid pattern */}
+        {/* Moving Grid pattern overlay */}
         <motion.div
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 opacity-5"
           style={{
             backgroundImage: `
               radial-gradient(circle at 25% 25%, white 1px, transparent 1px),

@@ -61,16 +61,16 @@ function ProjectPopup({ project, onClose }: { project: Project | null; onClose: 
 
         <div className="flex flex-col sm:flex-row gap-3">
           <motion.a
-            href="#"
+            href="/contact"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-gradient-to-r from-gray-100 to-gray-300 text-gray-900 px-6 py-3 rounded-2xl text-sm hover:from-gray-200 hover:to-gray-400 transition-all duration-300 font-medium shadow-lg flex-1 text-center"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
-            View Project
+            Get this project
           </motion.a>
-          <motion.a
+          {/* <motion.a
             href="#"
             target="_blank"
             rel="noopener noreferrer"
@@ -79,7 +79,7 @@ function ProjectPopup({ project, onClose }: { project: Project | null; onClose: 
             whileTap={{ scale: 0.98 }}
           >
             View Code
-          </motion.a>
+          </motion.a> */}
         </div>
       </motion.div>
     </motion.div>
@@ -100,31 +100,39 @@ export default function Home() {
   }, []);
 
   const allProjects = [
-    {
-      name: "E-Commerce Platform",
-      tech: "React, Node.js, MongoDB",
-      description: "Full-stack e-commerce solution with payment integration, advanced product filtering, user authentication, and an admin dashboard for managing products, orders, and users. Features a responsive design ensuring a seamless experience across all devices.",
-      image: "https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800",
-    },
-    {
-      name: "Task Management App",
-      tech: "Next.js, TypeScript, Prisma, Tailwind CSS",
-      description: "A collaborative project management tool allowing users to create, assign, and track tasks in real-time. Includes features like drag-and-drop boards, deadline reminders, and team collaboration spaces. Built with a type-safe backend and a modern UI.",
-      image: "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800",
-    },
-    {
-      name: "AI Chat Interface",
-      tech: "React, Python, OpenAI API, Flask",
-      description: "An intelligent chatbot application leveraging OpenAI's API for natural language processing and generation. Provides a conversational interface for users to interact with an AI, capable of answering questions, generating text, and more. Includes a clean, user-friendly UI.",
-      image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
-    },
-    {
-      name: "Portfolio Website",
-      tech: "Next.js, Tailwind CSS, Framer Motion",
-      description: "A responsive personal portfolio website designed to showcase development projects, skills, and experience. Features smooth animations and a clean, modern aesthetic. (This is the site you are currently viewing).",
-      image: "https://images.pexels.com/photos/326503/pexels-photo-326503.jpeg?auto=compress&cs=tinysrgb&w=800",
-    },
-  ]
+  {
+    name: "Academia.ai",
+    tech: "Next.js 15, Node.js, Python, Flask, Gemini API, WebRTC, Socket.io, Supabase, TailwindCSS",
+    description:
+      "AI-powered education platform with live classes, chatbot, automated exams, and advanced course management.",
+    image:
+      "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=800",
+  },
+  {
+    name: "Indeed Easy Apply Bot",
+    tech: "Python, Selenium, Web Automation",
+    description:
+      "Automated bot that applies to jobs on Indeed using Easy Apply. Filters jobs, fills forms, and mimics human behavior.",
+    image:
+      "https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg?auto=compress&cs=tinysrgb&w=800",
+  },
+  {
+    name: "RAG-Based Chatbot",
+    tech: "Python, LangChain, OpenAI API, Vector DB, FastAPI",
+    description:
+      "Contextual chatbot using Retrieval-Augmented Generation. Supports semantic search and dynamic document ingestion.",
+    image:
+      "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
+  },
+  {
+    name: "Rii – AI Desktop Buddy",
+    tech: "Python, Tkinter, SpeechRecognition, OpenAI API",
+    description:
+      "Interactive desktop assistant with voice and text commands, powered by OpenAI. Executes AI-generated scripts.",
+    image:
+      "https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=800",
+  },
+];
 
   // const displayProjects = allProjects.filter(project => project.name !== "Portfolio Website");
   const displayProjects = allProjects
