@@ -14,8 +14,9 @@ export default function ProjectsPage() {
   const categories = [
     { id: "all", label: "All Projects" },
     { id: "web", label: "Web Apps" },
-    { id: "mobile", label: "Mobile" },
     { id: "ai", label: "AI/ML" },
+    { id: "desktop", label: "Desktop" },
+    { id: "script", label: "Scripts" },
   ]
 const projects = [
   {
@@ -590,121 +591,6 @@ const projects = [
     },
   }
 ];
-  // const projects = [
-  //   {
-  //     id: 1,
-  //     name: "E-Commerce Platform",
-  //     category: "web",
-  //     tech: ["React", "Node.js", "MongoDB", "Stripe"],
-  //     description:
-  //       "A full-stack e-commerce solution with payment integration, product management, and user authentication.",
-  //     longDescription:
-  //       "Built a comprehensive e-commerce platform from scratch, featuring a modern React frontend with server-side rendering, robust Node.js backend, and secure payment processing. The platform handles thousands of transactions daily and includes advanced features like inventory management, analytics dashboard, and multi-vendor support.",
-  //     image: "https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800",
-  //     link: "#",
-  //     github: "#",
-  //     status: "Live",
-  //     year: "2023",
-  //     team: "4 developers",
-  //     features: [
-  //       "Secure payment processing with Stripe integration",
-  //       "Real-time inventory management system",
-  //       "Advanced search and filtering capabilities",
-  //       "Mobile-responsive design with PWA features",
-  //       "Admin dashboard with analytics and reporting",
-  //       "Multi-vendor marketplace functionality",
-  //     ],
-  //     metrics: {
-  //       users: "10K+",
-  //       transactions: "$500K+",
-  //       uptime: "99.9%",
-  //     },
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Task Management App",
-  //     category: "web",
-  //     tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-  //     description: "Collaborative project management with real-time updates, task assignment, and progress tracking.",
-  //     longDescription:
-  //       "Developed a sophisticated project management tool that enables teams to collaborate effectively. Features include real-time updates, drag-and-drop task management, time tracking, and comprehensive reporting. Built with modern technologies for optimal performance and scalability.",
-  //     image: "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800",
-  //     link: "#",
-  //     github: "#",
-  //     status: "Live",
-  //     year: "2023",
-  //     team: "3 developers",
-  //     features: [
-  //       "Real-time collaboration with WebSocket integration",
-  //       "Drag-and-drop task management interface",
-  //       "Time tracking and productivity analytics",
-  //       "Team communication and file sharing",
-  //       "Custom workflow automation",
-  //       "Integration with popular tools (Slack, GitHub)",
-  //     ],
-  //     metrics: {
-  //       users: "5K+",
-  //       tasks: "100K+",
-  //       teams: "500+",
-  //     },
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "AI Chat Interface",
-  //     category: "ai",
-  //     tech: ["React", "Python", "OpenAI API", "FastAPI"],
-  //     description: "Intelligent chatbot with natural language processing capabilities and context awareness.",
-  //     longDescription:
-  //       "Created an advanced AI-powered chat interface that leverages OpenAI's GPT models for natural language understanding. The system includes context management, conversation history, and custom training capabilities for domain-specific knowledge.",
-  //     image: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
-  //     link: "#",
-  //     github: "#",
-  //     status: "Beta",
-  //     year: "2024",
-  //     team: "2 developers",
-  //     features: [
-  //       "Natural language processing with GPT-4 integration",
-  //       "Context-aware conversation management",
-  //       "Custom knowledge base training",
-  //       "Multi-language support",
-  //       "Voice input and output capabilities",
-  //       "Analytics and conversation insights",
-  //     ],
-  //     metrics: {
-  //       conversations: "50K+",
-  //       accuracy: "95%",
-  //       languages: "12",
-  //     },
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Mobile Fitness App",
-  //     category: "mobile",
-  //     tech: ["React Native", "Firebase", "Redux", "Expo"],
-  //     description: "Cross-platform fitness tracking app with workout plans, progress monitoring, and social features.",
-  //     longDescription:
-  //       "Developed a comprehensive fitness application that helps users track workouts, monitor progress, and stay motivated. Features include custom workout plans, social challenges, nutrition tracking, and integration with wearable devices.",
-  //     image: "https://images.pexels.com/photos/326503/pexels-photo-326503.jpeg?auto=compress&cs=tinysrgb&w=800",
-  //     link: "#",
-  //     github: "#",
-  //     status: "Live",
-  //     year: "2023",
-  //     team: "5 developers",
-  //     features: [
-  //       "Custom workout plan generation",
-  //       "Progress tracking with detailed analytics",
-  //       "Social challenges and leaderboards",
-  //       "Nutrition tracking and meal planning",
-  //       "Wearable device integration",
-  //       "Offline mode for workouts",
-  //     ],
-  //     metrics: {
-  //       downloads: "25K+",
-  //       workouts: "200K+",
-  //       retention: "78%",
-  //     },
-  //   },
-  // ]
 
   const filteredProjects =
     selectedCategory === "all" ? projects : projects.filter((project) => project.category === selectedCategory)
@@ -797,34 +683,54 @@ const projects = [
               {/* Project List */}
               <motion.div variants={itemVariants} className="lg:col-span-4">
                 <div className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-3xl p-6 border border-white/10 sticky top-24">
-                  <h2 className="font-serif text-xl mb-6 font-light">All Projects</h2>
-                  <div className="space-y-3">
-                    <AnimatePresence>
-                      {filteredProjects.map((project, index) => (
-                        <motion.button
-                          key={project.id}
-                          className={`w-full text-left p-4 rounded-2xl transition-all ${
-                            selectedProject === index ? "bg-white text-gray-900" : "hover:bg-white/10 text-white/80"
-                          }`}
-                          onClick={() => setSelectedProject(index)}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -20 }}
-                          transition={{ delay: index * 0.1 }}
-                          whileHover={{ x: 5 }}
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="font-serif font-medium">{project.name}</h3>
-                            <div
-                              className={`w-2 h-2 rounded-full ${
-                                project.status === "Ready" ? "bg-green-400" : "bg-yellow-400"
-                              }`}
-                            ></div>
-                          </div>
-                          <p className="text-xs opacity-60">{project.tech.slice(0, 2).join(", ")}</p>
-                        </motion.button>
-                      ))}
-                    </AnimatePresence>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="font-serif text-xl font-light">All Projects</h2>
+                    <span className="text-xs text-white/50 bg-white/10 px-2 py-1 rounded-full">
+                      {filteredProjects.length}
+                    </span>
+                  </div>
+                  
+                  {/* Scrollable container with custom scrollbar */}
+                  <div className="relative">
+                    <div 
+                      className="space-y-3 max-h-[70vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/20 hover:scrollbar-thumb-white/30"
+                      style={{
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: 'rgba(255,255,255,0.2) transparent'
+                      }}
+                    >
+                      <AnimatePresence>
+                        {filteredProjects.map((project, index) => (
+                          <motion.button
+                            key={project.id}
+                            className={`w-full text-left p-4 rounded-2xl transition-all ${
+                              selectedProject === index ? "bg-white text-gray-900" : "hover:bg-white/10 text-white/80"
+                            }`}
+                            onClick={() => setSelectedProject(index)}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ delay: index * 0.05 }} // Reduced delay for smoother loading
+                            whileHover={{ x: 5 }}
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <h3 className="font-serif font-medium text-sm leading-tight">{project.name}</h3>
+                              <div
+                                className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                                  project.status === "Ready" ? "bg-green-400" : "bg-yellow-400"
+                                }`}
+                              ></div>
+                            </div>
+                            <p className="text-xs opacity-60 truncate">{project.tech.slice(0, 2).join(", ")}</p>
+                          </motion.button>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                    
+                    {/* Fade overlay at bottom to indicate scrollable content */}
+                    {filteredProjects.length > 6 && (
+                      <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-[#1A1A1A] to-transparent pointer-events-none rounded-b-3xl" />
+                    )}
                   </div>
                 </div>
               </motion.div>
