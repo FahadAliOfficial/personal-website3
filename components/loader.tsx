@@ -7,10 +7,10 @@ interface LoaderProps {
   onComplete: () => void
 }
 
-export default function Loader({ onComplete }: LoaderProps) {  const [currentIndex, setCurrentIndex] = useState(0)
+export default function Loader({ onComplete }: LoaderProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isMouseMoving, setIsMouseMoving] = useState(false)
 
   const roles = [
     "Python Developer",
@@ -20,25 +20,14 @@ export default function Loader({ onComplete }: LoaderProps) {  const [currentInd
     "AI/ML App Developer"
   ]
 
-  // Enhanced mouse follower effect
+  // Mouse follower effect
   useEffect(() => {
-    let moveTimeout: NodeJS.Timeout
-
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
-      setIsMouseMoving(true)
-      
-      clearTimeout(moveTimeout)
-      moveTimeout = setTimeout(() => {
-        setIsMouseMoving(false)
-      }, 150)
     }
 
     window.addEventListener('mousemove', handleMouseMove)
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      clearTimeout(moveTimeout)
-    }
+    return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,100 +47,27 @@ export default function Loader({ onComplete }: LoaderProps) {  const [currentInd
 
     return () => clearInterval(interval)
   }, [onComplete, roles.length])
+
   if (isComplete) {
     return (      <motion.div
         className="fixed inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#0A0A0A] flex items-center justify-center z-50 overflow-hidden"
         exit={{ opacity: 0 }}
         transition={{ duration: 0.8 }}      >
-        {/* Enhanced Mouse Follower System */}
-        {/* Main large follower */}
+        {/* Mouse Follower */}
         <motion.div
-          className="absolute pointer-events-none z-0"
+          className="absolute w-64 h-64 pointer-events-none z-0"
           style={{
-            width: 300,
-            height: 300,
-            background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 20%, rgba(255,255,255,0.02) 40%, rgba(255,255,255,0.01) 60%, transparent 80%)',
-            filter: 'blur(2px)',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 40%, transparent 70%)',
           }}
           animate={{
-            x: mousePosition.x - 150,
-            y: mousePosition.y - 150,
-            scale: isMouseMoving ? 1.2 : 1,
-            opacity: isMouseMoving ? 0.8 : 0.4,
+            x: mousePosition.x - 128,
+            y: mousePosition.y - 128,
           }}
           transition={{
             type: "spring",
-            stiffness: 20,
-            damping: 30,
-            mass: 0.5,
-          }}
-        />
-        
-        {/* Medium follower */}
-        <motion.div
-          className="absolute pointer-events-none z-0"
-          style={{
-            width: 150,
-            height: 150,
-            background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.02) 60%, transparent 80%)',
-            filter: 'blur(1px)',
-          }}
-          animate={{
-            x: mousePosition.x - 75,
-            y: mousePosition.y - 75,
-            scale: isMouseMoving ? 1.1 : 0.9,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 40,
-            damping: 25,
-            mass: 0.3,
-          }}
-        />
-        
-        {/* Small precise follower */}
-        <motion.div
-          className="absolute pointer-events-none z-0"
-          style={{
-            width: 60,
-            height: 60,
-            background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 40%, transparent 70%)',
-          }}
-          animate={{
-            x: mousePosition.x - 30,
-            y: mousePosition.y - 30,
-            scale: isMouseMoving ? 1.3 : 1,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 100,
-            damping: 20,
-            mass: 0.1,
-          }}
-        />
-        
-        {/* Trailing particles */}
-        <motion.div
-          className="absolute pointer-events-none z-0"
-          style={{
-            width: 20,
-            height: 20,
-            background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%)',
-            borderRadius: '50%',
-          }}
-          animate={{
-            x: mousePosition.x - 10,
-            y: mousePosition.y - 10,
-            scale: isMouseMoving ? [1, 1.5, 1] : 1,
-            opacity: isMouseMoving ? [0.8, 1, 0.8] : 0.6,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 150,
+            stiffness: 50,
             damping: 15,
-            mass: 0.05,
-            scale: { duration: 0.3, repeat: isMouseMoving ? Infinity : 0 },
-            opacity: { duration: 0.3, repeat: isMouseMoving ? Infinity : 0 },
+            mass: 0.1,
           }}
         />
 
@@ -192,159 +108,46 @@ export default function Loader({ onComplete }: LoaderProps) {  const [currentInd
       </motion.div>
     )
   }
+
   return (    <motion.div
       className="fixed inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#0A0A0A] flex items-center justify-center z-50 overflow-hidden"
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}    >
-      {/* Enhanced Mouse Follower System */}
-      {/* Main large atmospheric follower */}
+      {/* Mouse Follower */}
       <motion.div
-        className="absolute pointer-events-none z-0"
+        className="absolute w-96 h-96 pointer-events-none z-0"
         style={{
-          width: 400,
-          height: 400,
-          background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 15%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.01) 50%, transparent 70%)',
-          filter: 'blur(3px)',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 30%, rgba(255,255,255,0.01) 50%, transparent 70%)',
         }}
         animate={{
-          x: mousePosition.x - 200,
-          y: mousePosition.y - 200,
-          scale: isMouseMoving ? 1.3 : 1,
-          opacity: isMouseMoving ? 0.9 : 0.5,
+          x: mousePosition.x - 192,
+          y: mousePosition.y - 192,
         }}
         transition={{
           type: "spring",
-          stiffness: 15,
-          damping: 40,
-          mass: 0.8,
-        }}
-      />
-
-      {/* Secondary large follower */}
-      <motion.div
-        className="absolute pointer-events-none z-0"
-        style={{
-          width: 250,
-          height: 250,
-          background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.02) 50%, transparent 75%)',
-          filter: 'blur(2px)',
-        }}
-        animate={{
-          x: mousePosition.x - 125,
-          y: mousePosition.y - 125,
-          scale: isMouseMoving ? 1.2 : 0.9,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 25,
-          damping: 30,
-          mass: 0.5,
-        }}
-      />
-
-      {/* Medium follower */}
-      <motion.div
-        className="absolute pointer-events-none z-0"
-        style={{
-          width: 120,
-          height: 120,
-          background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.03) 60%, transparent 80%)',
-          filter: 'blur(1px)',
-        }}
-        animate={{
-          x: mousePosition.x - 60,
-          y: mousePosition.y - 60,
-          scale: isMouseMoving ? 1.4 : 1,
-          rotate: isMouseMoving ? 180 : 0,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 60,
+          stiffness: 30,
           damping: 20,
           mass: 0.2,
-          rotate: { duration: 0.8 }
         }}
       />
 
-      {/* Core follower */}
+      {/* Secondary smaller follower for layered effect */}
       <motion.div
-        className="absolute pointer-events-none z-0"
+        className="absolute w-32 h-32 pointer-events-none z-0"
         style={{
-          width: 50,
-          height: 50,
-          background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.05) 70%, transparent 90%)',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 40%, transparent 70%)',
         }}
         animate={{
-          x: mousePosition.x - 25,
-          y: mousePosition.y - 25,
-          scale: isMouseMoving ? 1.5 : 1,
+          x: mousePosition.x - 64,
+          y: mousePosition.y - 64,
         }}
         transition={{
           type: "spring",
-          stiffness: 120,
-          damping: 15,
+          stiffness: 80,
+          damping: 25,
           mass: 0.1,
         }}
       />
-
-      {/* Precise center dot */}
-      <motion.div
-        className="absolute pointer-events-none z-0"
-        style={{
-          width: 16,
-          height: 16,
-          background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 50%, transparent 80%)',
-          borderRadius: '50%',
-          boxShadow: '0 0 20px rgba(255,255,255,0.3)',
-        }}
-        animate={{
-          x: mousePosition.x - 8,
-          y: mousePosition.y - 8,
-          scale: isMouseMoving ? [1, 1.8, 1] : 1,
-          opacity: isMouseMoving ? [0.8, 1, 0.8] : 0.7,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 200,
-          damping: 10,
-          mass: 0.05,
-          scale: { 
-            duration: 0.4, 
-            repeat: isMouseMoving ? Infinity : 0,
-            ease: "easeInOut"
-          },
-          opacity: { 
-            duration: 0.4, 
-            repeat: isMouseMoving ? Infinity : 0,
-            ease: "easeInOut"
-          },
-        }}
-      />
-
-      {/* Trailing particles */}
-      {Array.from({ length: 3 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute pointer-events-none z-0"
-          style={{
-            width: 8 - i * 2,
-            height: 8 - i * 2,
-            background: `rgba(255,255,255,${0.3 - i * 0.1})`,
-            borderRadius: '50%',
-          }}
-          animate={{
-            x: mousePosition.x - (4 - i),
-            y: mousePosition.y - (4 - i),
-            scale: isMouseMoving ? 1.5 : 0.8,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 80 - i * 20,
-            damping: 25 + i * 5,
-            mass: 0.1 + i * 0.05,
-          }}
-        />
-      ))}
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0">

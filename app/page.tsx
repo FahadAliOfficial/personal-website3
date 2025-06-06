@@ -7,8 +7,16 @@ import Link from "next/link"
 import Loader from "@/components/loader"
 import MouseFollower from "@/components/mouse-follower"
 
+// Project type definition
+interface Project {
+  name: string;
+  tech: string;
+  description: string;
+  image: string;
+}
+
 // Popup Component (unchanged)
-function ProjectPopup({ project, onClose }) {
+function ProjectPopup({ project, onClose }: { project: Project | null; onClose: () => void }) {
   if (!project) return null;
 
   return (
@@ -83,7 +91,13 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [popupProject, setPopupProject] = useState(null);
+  const [popupProject, setPopupProject] = useState<Project | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Fix hydration by ensuring component only renders after mounting
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const allProjects = [
     {
@@ -160,7 +174,7 @@ export default function Home() {
   
   const currentProject = displayProjects.length > 0 ? displayProjects[selectedProject] : null;
 
-  const openPopup = (project) => {
+  const openPopup = (project: Project) => {
     setPopupProject(project);
     setIsPopupOpen(true);
   };
@@ -186,6 +200,11 @@ export default function Home() {
       document.body.classList.remove('overflow-hidden');
     };
   }, [isPopupOpen]);
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <>
