@@ -217,7 +217,7 @@ export default function ContactPage() {
                     {[
                       { name: "GITHUB", href: "https://github.com/FahadAliOfficial", color: "from-gray-600 to-gray-800" },
                       { name: "LINKEDIN", href: "https://www.linkedin.com/in/fahaddali/", color: "from-blue-600 to-blue-800" },
-                      { name: "TWITTER", href: "https://dev.to/fahadaliofficial", color: "from-sky-500 to-blue-600" },
+                      { name: "TWITTER", href: "https://twitter.com/_fahaddali", color: "from-sky-500 to-blue-600" },
                       { name: "DEV.TO", href: "https://dev.to/fahadaliofficial", color: "from-green-600 to-emerald-700" },
                     ].map((social, index) => (
                       <motion.a
