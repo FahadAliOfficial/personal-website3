@@ -1,15 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Github, ExternalLink, Calendar, Users } from "lucide-react";
 import MouseFollower from "@/components/mouse-follower";
+import { useIsMobile } from "@/components/ui/use-mobile";
 
 export default function ProjectsPage() {
+  const [mounted, setMounted] = useState(false);
+  const isMobile = useIsMobile();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedProject, setSelectedProject] = useState(0);
+
+  // Fix hydration by ensuring component only renders after mounting
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const categories = [
     { id: "all", label: "All Projects" },
@@ -746,12 +754,17 @@ export default function ProjectsPage() {
         stiffness: 100,
         damping: 12,
       },
-    },
-  };
+    },  };
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
-      <MouseFollower />
+      {/* Only show MouseFollower on desktop devices */}
+      {!isMobile && <MouseFollower />}
 
       {/* Navigation */}
       <motion.div
@@ -791,19 +804,17 @@ export default function ProjectsPage() {
                 A collection of projects that showcase my skills in full-stack
                 development, AI integration, and modern web technologies.
               </p>
-            </motion.div>
-
-            {/* Category Filter */}
+            </motion.div>            {/* Category Filter */}
             <motion.div
               variants={itemVariants}
-              className="flex justify-center mb-12"
+              className="flex justify-center mb-8 sm:mb-12 px-3 sm:px-0"
             >
-              <div className="bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] rounded-2xl p-2 border border-white/10">
-                <div className="flex space-x-2">
+              <div className="bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] rounded-xl sm:rounded-2xl p-2 sm:p-3 border border-white/10 w-full sm:w-auto">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                   {categories.map((category) => (
                     <motion.button
                       key={category.id}
-                      className={`px-6 py-3 rounded-xl text-sm font-medium transition-all ${
+                      className={`px-3 py-2 sm:px-4 sm:py-2.5 lg:px-6 lg:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
                         selectedCategory === category.id
                           ? "bg-white text-gray-900"
                           : "text-white/60 hover:text-white hover:bg-white/10"

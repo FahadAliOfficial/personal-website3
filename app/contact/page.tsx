@@ -2,14 +2,17 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowLeft, Mail, Phone, MapPin, Send, Calendar, Clock } from "lucide-react"
 import emailjs from '@emailjs/browser'
 import MouseFollower from "@/components/mouse-follower"
+import { useIsMobile } from "@/components/ui/use-mobile"
 
 export default function ContactPage() {
+  const [mounted, setMounted] = useState(false);
+  const isMobile = useIsMobile();
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -18,10 +21,14 @@ export default function ContactPage() {
     budget: "",
     timeline: "",
   })
-
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState("")
+
+  // Fix hydration by ensuring component only renders after mounting
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormState({
@@ -100,13 +107,18 @@ export default function ContactPage() {
         type: "spring",
         stiffness: 100,
         damping: 12,
-      },
-    },
+      },    },
+  }
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null;
   }
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
-      <MouseFollower />
+      {/* Only show MouseFollower on desktop devices */}
+      {!isMobile && <MouseFollower />}
       
       {/* Navigation */}
       <motion.div
