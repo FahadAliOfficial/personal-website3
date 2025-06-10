@@ -290,7 +290,7 @@ export default function ProjectsPage() {
       longDescription:
         "Built a sophisticated chatbot system that combines retrieval-augmented generation with vector databases for highly contextual and accurate responses. Supports document ingestion, semantic search, and maintains conversation context.",
       image:
-        "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "/projects/RAG.png",
       link: "#",
       github: "#",
       status: "Ready",

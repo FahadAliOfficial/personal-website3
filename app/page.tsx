@@ -93,6 +93,7 @@ export default function Home() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupProject, setPopupProject] = useState<Project | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
   const { shouldShowLoader, setHasSeenLoader } = useLoader();
 
@@ -124,7 +125,7 @@ export default function Home() {
     description:
       "Contextual chatbot using Retrieval-Augmented Generation. Supports semantic search and dynamic document ingestion.",
     image:
-      "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "/projects/RAG.png",
   },
   {
     name: "Rii – AI Desktop Buddy",
@@ -198,7 +199,6 @@ export default function Home() {
   const handleLoaderComplete = () => {
     setHasSeenLoader(true);
   };
-
   useEffect(() => {
     if (isPopupOpen) {
       document.body.classList.add('overflow-hidden');
@@ -209,6 +209,30 @@ export default function Home() {
       document.body.classList.remove('overflow-hidden');
     };
   }, [isPopupOpen]);
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen && !(event.target as Element).closest('header')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isMobileMenuOpen]);
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
@@ -232,40 +256,106 @@ export default function Home() {
             variants={containerVariants}
           >        {/* Header */}
         <motion.header
-          className="flex flex-col sm:flex-row justify-between items-center p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 text-white gap-3 sm:gap-4 bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl border border-white/10 backdrop-blur-sm"
+          className="relative bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 backdrop-blur-sm mb-4 sm:mb-6 md:mb-8"
           variants={itemVariants}
         >
-          <motion.div
-            className="text-lg sm:text-xl md:text-2xl font-light tracking-wide font-serif"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
-            Fahad Ali
-          </motion.div>
-          <nav className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12">
-            {[
-              { name: "ABOUT", href: "/about" },
-              { name: "PROJECTS", href: "/projects" },
-              { name: "CONTACT", href: "/contact" },
-            ].map((item, index) => (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
-              >
-                <Link
-                  href={item.href}
-                  className="text-xs sm:text-sm md:text-base font-light tracking-[1px] sm:tracking-[2px] hover:text-white/60 transition-all duration-300 relative px-2 sm:px-3 md:px-4 py-2 group uppercase cursor-pointer touch-manipulation"
+          {/* Desktop and larger mobile layout */}
+          <div className="flex justify-between items-center p-3 sm:p-4 md:p-6 lg:p-8 text-white">
+            <motion.div
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-light tracking-wide font-serif z-10"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              Fahad Ali
+            </motion.div>
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden sm:flex gap-4 md:gap-6 lg:gap-8 xl:gap-12">
+              {[
+                { name: "ABOUT", href: "/about" },
+                { name: "PROJECTS", href: "/projects" },
+                { name: "CONTACT", href: "/contact" },
+              ].map((item, index) => (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
                 >
-                  {item.name}
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                </Link>
+                  <Link
+                    href={item.href}
+                    className="text-sm md:text-base font-light tracking-[1px] md:tracking-[2px] hover:text-white/60 transition-all duration-300 relative px-2 md:px-3 lg:px-4 py-2 group uppercase cursor-pointer"
+                  >
+                    {item.name}
+                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <motion.button
+              className="sm:hidden p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 z-10"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+              aria-label="Toggle mobile menu"
+            >
+              <motion.div
+                animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {!isMobileMenuOpen ? (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
               </motion.div>
-            ))}
-          </nav>
-        </motion.header>        {/* Main Grid Layout */}
+            </motion.button>
+          </div>
+
+          {/* Mobile Navigation Menu */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.nav
+                className="sm:hidden absolute top-full left-0 right-0 mt-2 bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-xl border border-white/10 backdrop-blur-sm z-50"
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              >
+                <div className="p-4 space-y-2">
+                  {[
+                    { name: "ABOUT", href: "/about" },
+                    { name: "PROJECTS", href: "/projects" },
+                    { name: "CONTACT", href: "/contact" },
+                  ].map((item, index) => (
+                    <motion.div
+                      key={item.name}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.3 }}
+                    >
+                      <Link
+                        href={item.href}
+                        className="block w-full text-left px-4 py-3 text-white text-sm font-light tracking-[1px] uppercase hover:bg-white/10 rounded-lg transition-all duration-200 touch-manipulation"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.nav>
+            )}
+          </AnimatePresence>
+        </motion.header>{/* Main Grid Layout */}
         <main className="grid grid-cols-1 xl:grid-cols-12 gap-4 sm:gap-6 md:gap-8">
           {/* --- LEFT COLUMN (HERO, INTRO, CONTACT) --- */}
           <div className="xl:col-span-8 flex flex-col gap-4 sm:gap-6 md:gap-8">
