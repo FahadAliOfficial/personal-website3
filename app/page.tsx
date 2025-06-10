@@ -490,18 +490,16 @@ export default function Home() {
 
             </div>
           </div>          {/* --- RIGHT COLUMN (PROJECTS + SOCIALS) --- MOBILE OPTIMIZED --- */}
-          <div className="xl:col-span-4 flex flex-col gap-4 sm:gap-6 md:gap-8">
-            <motion.div
-              className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col flex-grow border border-gray-100 shadow-xl"
+          <div className="xl:col-span-4 flex flex-col gap-4 sm:gap-6 md:gap-8">            <motion.div
+              className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 flex flex-col flex-grow border border-gray-100 shadow-xl"
               variants={itemVariants}
             >
               {/* Dynamic Navigation with Image Positioning */}
-              <div className="flex flex-col gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="flex flex-col gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                 {displayProjects.map((project, index) => (
                   <div key={project.name} className="w-full">
-                    {/* Project Navigation Item */}
-                    <motion.div
-                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 cursor-pointer transition-all duration-300 relative rounded-lg sm:rounded-xl touch-manipulation ${
+                    {/* Project Navigation Item */}                    <motion.div
+                      className={`w-full px-2.5 sm:px-3 py-2 sm:py-2.5 cursor-pointer transition-all duration-300 relative rounded-lg sm:rounded-xl touch-manipulation ${
                         selectedProject === index
                           ? "bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-lg"
                           : "hover:bg-gray-100 text-gray-700"
@@ -519,44 +517,42 @@ export default function Home() {
                     </motion.div>
 
                     {/* Dynamic Image Positioning - Show image after selected project */}
-                    {selectedProject === index && currentProject && (
-                      <motion.div
+                    {selectedProject === index && currentProject && (                      <motion.div
                         key={`image-${selectedProject}`} // Key for AnimatePresence
                         initial={{ opacity: 0, scale: 0.95, y: -10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: -10 }}
                         transition={{ duration: 0.4, delay: 0.1 }}
-                        className="mt-3 sm:mt-4 mb-2 relative rounded-xl sm:rounded-2xl overflow-hidden h-40 sm:h-48 md:h-56 lg:h-64"
+                        className="mt-2 sm:mt-3 mb-1 sm:mb-2 relative rounded-lg sm:rounded-xl overflow-hidden h-32 sm:h-36 md:h-40 lg:h-44"
                       >
                         <Image
                           src={currentProject.image || "/placeholder.svg"}
                           alt={currentProject.name}
                           fill
                           className="object-cover"
-                        />
-                        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                          <div className="self-end p-2 sm:p-3">
+                        />                        <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                          <div className="self-end p-1.5 sm:p-2">
                             <motion.button
                               onClick={(e) => {
                                 e.stopPropagation(); 
                                 openPopup(currentProject);
                               }}
-                              className="p-1.5 sm:p-2 bg-black/40 hover:bg-black/60 rounded-full text-white transition-colors duration-300 pointer-events-auto touch-manipulation"
+                              className="p-1 sm:p-1.5 bg-black/40 hover:bg-black/60 rounded-full text-white transition-colors duration-300 pointer-events-auto touch-manipulation"
                               aria-label="Open project details"
                               whileHover={{ scale: 1.1, rotate: 3 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                               </svg>
                             </motion.button>
                           </div>
                           
-                          <div className="p-3 sm:p-4 bg-gradient-to-t from-black/80 via-black/60 to-transparent">
-                            <h4 className="font-serif text-sm sm:text-base md:text-lg font-medium text-white">
+                          <div className="p-2 sm:p-3 bg-gradient-to-t from-black/80 via-black/60 to-transparent">
+                            <h4 className="font-serif text-xs sm:text-sm md:text-base font-medium text-white">
                               {currentProject.name} 
                             </h4>
-                            <p className="text-xs md:text-sm text-gray-200 opacity-90 line-clamp-2">
+                            <p className="text-xs text-gray-200 opacity-90 line-clamp-2">
                               {currentProject.tech} 
                             </p>
                           </div>
@@ -564,10 +560,9 @@ export default function Home() {
                       </motion.div>
                     )}
 
-                    {/* Separator Line - only show if not the last item */}
-                    {index < displayProjects.length - 1 && (
+                    {/* Separator Line - only show if not the last item */}                    {index < displayProjects.length - 1 && (
                       <motion.div
-                        className={`mt-2 sm:mt-3 h-px transition-all duration-300 ${
+                        className={`mt-1.5 sm:mt-2 h-px transition-all duration-300 ${
                           selectedProject === index || selectedProject === index + 1
                             ? "bg-transparent"
                             : "bg-gray-200"
@@ -580,10 +575,8 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-            </motion.div>
-
-            <motion.div
-              className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex-shrink-0 border border-white/10"
+            </motion.div>            <motion.div
+              className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 flex-shrink-0 border border-white/10"
               variants={itemVariants}
             >
               <nav className="flex flex-wrap gap-3 sm:gap-4 md:gap-6 justify-center">
