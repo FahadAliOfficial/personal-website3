@@ -198,9 +198,8 @@ export default function Home() {
   };
   const handleLoaderComplete = () => {
     setHasSeenLoader(true);
-  };
-  useEffect(() => {
-    if (isPopupOpen) {
+  };  useEffect(() => {
+    if (isPopupOpen || isMobileMenuOpen) {
       document.body.classList.add('overflow-hidden');
     } else {
       document.body.classList.remove('overflow-hidden');
@@ -208,7 +207,7 @@ export default function Home() {
     return () => {
       document.body.classList.remove('overflow-hidden');
     };
-  }, [isPopupOpen]);
+  }, [isPopupOpen, isMobileMenuOpen]);
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -244,8 +243,7 @@ export default function Home() {
         {shouldShowLoader && (
           <Loader onComplete={handleLoaderComplete} />        )}
       </AnimatePresence>
-        {!shouldShowLoader && (
-        <div className="min-h-screen bg-[#0A0A0A] text-[#2C2C2C] p-3 sm:p-4 md:p-6 lg:p-8 flex justify-center items-start sm:items-center relative overflow-hidden">
+        {!shouldShowLoader && (        <div className="min-h-screen bg-[#0A0A0A] text-[#2C2C2C] p-3 sm:p-4 md:p-6 lg:p-8 flex justify-center items-start sm:items-center relative overflow-x-hidden">
           {/* Only show MouseFollower on desktop devices */}
           {!isMobile && <MouseFollower />}
           
@@ -256,7 +254,7 @@ export default function Home() {
             variants={containerVariants}
           >        {/* Header */}
         <motion.header
-          className="relative bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 backdrop-blur-sm mb-4 sm:mb-6 md:mb-8"
+          className="relative bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/10 backdrop-blur-sm mb-4 sm:mb-6 md:mb-8 z-[50]"
           variants={itemVariants}
         >
           {/* Desktop and larger mobile layout */}
@@ -292,11 +290,9 @@ export default function Home() {
                   </Link>
                 </motion.div>
               ))}
-            </nav>
-
-            {/* Mobile Menu Button */}
+            </nav>            {/* Mobile Menu Button */}
             <motion.button
-              className="sm:hidden p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 z-10"
+              className="sm:hidden p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 z-[110] relative"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -318,18 +314,27 @@ export default function Home() {
                 )}
               </motion.div>
             </motion.button>
-          </div>
-
-          {/* Mobile Navigation Menu */}
+          </div>          {/* Mobile Navigation Menu */}
           <AnimatePresence>
             {isMobileMenuOpen && (
-              <motion.nav
-                className="sm:hidden absolute top-full left-0 right-0 mt-2 bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-xl border border-white/10 backdrop-blur-sm z-50"
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-              >
+              <>
+                {/* Backdrop overlay */}
+                <motion.div
+                  className="sm:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[90]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                />
+                
+                <motion.nav
+                  className="sm:hidden fixed top-16 left-3 right-3 md:left-6 md:right-6 lg:left-8 lg:right-8 bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-xl border border-white/10 backdrop-blur-sm z-[100] shadow-2xl"
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
                 <div className="p-4 space-y-2">
                   {[
                     { name: "ABOUT", href: "/about" },
@@ -350,9 +355,9 @@ export default function Home() {
                         {item.name}
                       </Link>
                     </motion.div>
-                  ))}
-                </div>
-              </motion.nav>
+                  ))}                </div>
+                </motion.nav>
+              </>
             )}
           </AnimatePresence>
         </motion.header>{/* Main Grid Layout */}
@@ -387,11 +392,9 @@ export default function Home() {
                     elegant code
                   </span>
                 </motion.h1>
-              </motion.div>
-
-              {/* Portrait Photo Panel */}
+              </motion.div>              {/* Portrait Photo Panel */}
               <motion.div
-                className="lg:col-span-3 bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl overflow-hidden p-0 min-h-[18rem] sm:min-h-[20rem] md:min-h-[24rem] lg:min-h-[28rem] order-first lg:order-last border border-white/10"
+                className="lg:col-span-3 bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl overflow-hidden p-0 min-h-[18rem] sm:min-h-[20rem] md:min-h-[24rem] lg:min-h-[28rem] order-first lg:order-last border border-white/10 relative z-[5]"
                 variants={itemVariants}
               >
                 <motion.div
@@ -435,11 +438,9 @@ export default function Home() {
                   I'm a passionate full-stack developer who specializes in creating modern web applications. With
                   expertise in React, Node.js, and cloud technologies, I turn ideas into scalable digital solutions.
                 </motion.p>
-              </motion.div>
-
-              {/* Contact Panel */}
+              </motion.div>              {/* Contact Panel */}
               <motion.div
-                className="lg:col-span-3 bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 text-white flex flex-col justify-between border border-white/10 cursor-pointer relative overflow-hidden group touch-manipulation"
+                className="lg:col-span-3 bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 text-white flex flex-col justify-between border border-white/10 cursor-pointer relative overflow-hidden group touch-manipulation min-h-[120px] sm:min-h-[140px]"
                 variants={itemVariants}
                 onClick={() => window.location.href = '/contact'}
                 whileHover={{ scale: 1.02 }}
@@ -491,7 +492,7 @@ export default function Home() {
             </div>
           </div>          {/* --- RIGHT COLUMN (PROJECTS + SOCIALS) --- MOBILE OPTIMIZED --- */}
           <div className="xl:col-span-4 flex flex-col gap-4 sm:gap-6 md:gap-8">            <motion.div
-              className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 flex flex-col flex-grow border border-gray-100 shadow-xl"
+              className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 flex flex-col flex-grow border border-gray-100 shadow-xl overflow-hidden"
               variants={itemVariants}
             >
               {/* Dynamic Navigation with Image Positioning */}
@@ -499,7 +500,7 @@ export default function Home() {
                 {displayProjects.map((project, index) => (
                   <div key={project.name} className="w-full">
                     {/* Project Navigation Item */}                    <motion.div
-                      className={`w-full px-2.5 sm:px-3 py-2 sm:py-2.5 cursor-pointer transition-all duration-300 relative rounded-lg sm:rounded-xl touch-manipulation ${
+                      className={`w-full px-2.5 sm:px-3 py-2 sm:py-2.5 cursor-pointer transition-all duration-300 relative rounded-lg sm:rounded-xl touch-manipulation min-h-[44px] flex items-center ${
                         selectedProject === index
                           ? "bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-lg"
                           : "hover:bg-gray-100 text-gray-700"
@@ -510,9 +511,9 @@ export default function Home() {
                       transition={{ duration: 0.4, delay: 0.8 + index * 0.05 }} 
                       whileHover={{ scale: selectedProject === index ? 1 : 1.01 }}
                     >
-                      <div className="text-left"> 
-                        <div className="font-serif text-sm sm:text-sm md:text-base font-medium">{project.name.split(" ")[0]}</div>
-                        <div className="text-xs opacity-70 mt-0.5">{project.tech.split(",")[0]}</div>
+                      <div className="text-left flex-1 min-w-0"> 
+                        <div className="font-serif text-sm sm:text-sm md:text-base font-medium truncate">{project.name.split(" ")[0]}</div>
+                        <div className="text-xs opacity-70 mt-0.5 truncate">{project.tech.split(",")[0]}</div>
                       </div>
                     </motion.div>
 
@@ -578,8 +579,7 @@ export default function Home() {
             </motion.div>            <motion.div
               className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-6 flex-shrink-0 border border-white/10"
               variants={itemVariants}
-            >
-              <nav className="flex flex-wrap gap-3 sm:gap-4 md:gap-6 justify-center">
+            >              <nav className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 lg:gap-6 justify-center">
                 {[
                   { name: "GITHUB", href: "https://github.com/FahadAliOfficial" },
                   { name: "LINKEDIN", href: "https://linkedin.com/in/fahaddali" },
@@ -596,8 +596,9 @@ export default function Home() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white text-xs tracking-[1px] sm:tracking-[2px] font-medium hover:text-white/60 transition-all duration-300 relative py-2 group cursor-pointer touch-manipulation"
+                      className="text-white text-xs tracking-[1px] sm:tracking-[2px] font-medium hover:text-white/60 transition-all duration-300 relative py-2 px-1 group cursor-pointer touch-manipulation min-h-[44px] flex items-center"
                       whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       {social.name}
                       <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
