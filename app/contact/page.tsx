@@ -1,14 +1,22 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { ArrowLeft, Mail, Phone, MapPin, Send, Calendar, Clock } from "lucide-react"
-import emailjs from '@emailjs/browser'
-import MouseFollower from "@/components/mouse-follower"
-import { useIsMobile } from "@/components/ui/use-mobile"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  Calendar,
+  Clock,
+} from "lucide-react";
+import emailjs from "@emailjs/browser";
+import MouseFollower from "@/components/mouse-follower";
+import { useIsMobile } from "@/components/ui/use-mobile";
 
 export default function ContactPage() {
   const [mounted, setMounted] = useState(false);
@@ -20,36 +28,42 @@ export default function ContactPage() {
     subject: "Project Inquiry",
     budget: "",
     timeline: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [submitError, setSubmitError] = useState("")
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   // Fix hydration by ensuring component only renders after mounting
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitError("")
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError("");
 
     try {
       // Initialize EmailJS (you'll need to sign up at https://www.emailjs.com/)
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
       if (!serviceId || !templateId || !publicKey) {
-        throw new Error("EmailJS configuration is missing. Please check your environment variables.")
+        throw new Error(
+          "EmailJS configuration is missing. Please check your environment variables."
+        );
       }
 
       // Send email using EmailJS
@@ -60,12 +74,13 @@ export default function ContactPage() {
         message: formState.message,
         budget: formState.budget,
         timeline: formState.timeline,
-        to_email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "your-email@example.com",
-      }
+        to_email:
+          process.env.NEXT_PUBLIC_CONTACT_EMAIL || "your-email@example.com",
+      };
 
-      await emailjs.send(serviceId, templateId, templateParams, publicKey)
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
-      setIsSubmitted(true)
+      setIsSubmitted(true);
       setFormState({
         name: "",
         email: "",
@@ -73,19 +88,21 @@ export default function ContactPage() {
         subject: "Project Inquiry",
         budget: "",
         timeline: "",
-      })
+      });
 
       // Reset success message after 5 seconds
       setTimeout(() => {
-        setIsSubmitted(false)
-      }, 5000)
+        setIsSubmitted(false);
+      }, 5000);
     } catch (error) {
-      console.error("Error sending email:", error)
-      setSubmitError("Failed to send message. Please try again or contact me directly.")
+      console.error("Error sending email:", error);
+      setSubmitError(
+        "Failed to send message. Please try again or contact me directly."
+      );
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -96,7 +113,7 @@ export default function ContactPage() {
         delayChildren: 0.2,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -107,8 +124,9 @@ export default function ContactPage() {
         type: "spring",
         stiffness: 100,
         damping: 12,
-      },    },
-  }
+      },
+    },
+  };
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
@@ -119,7 +137,7 @@ export default function ContactPage() {
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* Only show MouseFollower on desktop devices */}
       {!isMobile && <MouseFollower />}
-      
+
       {/* Navigation */}
       <motion.div
         className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/80 backdrop-blur-xl border-b border-white/10"
@@ -129,7 +147,10 @@ export default function ContactPage() {
       >
         <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="inline-flex items-center text-white hover:text-white/60 transition-colors">
+            <Link
+              href="/"
+              className="inline-flex items-center text-white hover:text-white/60 transition-colors"
+            >
               <ArrowLeft className="mr-3 h-5 w-5" />
               <span className="font-light">Back to Home</span>
             </Link>
@@ -140,25 +161,39 @@ export default function ContactPage() {
 
       <div className="pt-20 pb-12">
         <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-12">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-12"
+          >
             {/* Header */}
             <motion.div variants={itemVariants} className="text-center">
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-light mb-6">
                 Let's <span className="italic">Connect</span>
               </h1>
               <p className="text-xl text-white/60 font-light max-w-2xl mx-auto">
-                Have a project in mind? I'd love to hear about it. Let's discuss how we can bring your ideas to life.
+                Have a project in mind? I'd love to hear about it. Let's discuss
+                how we can bring your ideas to life.
               </p>
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:items-stretch h-full min-h-[700px]">
               {/* Contact Info */}
-              <motion.div variants={itemVariants} className="lg:col-span-5 flex flex-col h-full space-y-8">
+              <motion.div
+                variants={itemVariants}
+                className="lg:col-span-5 flex flex-col h-full space-y-8"
+              >
                 {/* Contact Methods */}
                 <div className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-3xl p-8 border border-white/10">
-                  <h2 className="font-serif text-2xl font-light mb-8">Get in Touch</h2>
+                  <h2 className="font-serif text-2xl font-light mb-8">
+                    Get in Touch
+                  </h2>
                   <div className="space-y-6">
-                    <motion.div className="flex items-start group cursor-pointer" whileHover={{ x: 5 }}>
+                    <motion.div
+                      className="flex items-start group cursor-pointer"
+                      whileHover={{ x: 5 }}
+                    >
                       <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 rounded-2xl mr-6">
                         <Mail className="h-6 w-6 text-white" />
                       </div>
@@ -170,11 +205,16 @@ export default function ContactPage() {
                         >
                           fahadaliajizansar@gmail.com
                         </a>
-                        <p className="text-sm text-white/40 mt-1">I'll respond within 24 hours</p>
+                        <p className="text-sm text-white/40 mt-1">
+                          I'll respond within 24 hours
+                        </p>
                       </div>
                     </motion.div>
 
-                    <motion.div className="flex items-start group cursor-pointer" whileHover={{ x: 5 }}>
+                    <motion.div
+                      className="flex items-start group cursor-pointer"
+                      whileHover={{ x: 5 }}
+                    >
                       <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 rounded-2xl mr-6">
                         <Phone className="h-6 w-6 text-white" />
                       </div>
@@ -186,18 +226,27 @@ export default function ContactPage() {
                         >
                           +92 (326) 1310007
                         </a>
-                        <p className="text-sm text-white/40 mt-1">Available Mon-Fri, 9AM-6PM PST</p>
+                        <p className="text-sm text-white/40 mt-1">
+                          Available Mon-Fri, 9AM-6PM PST
+                        </p>
                       </div>
                     </motion.div>
 
-                    <motion.div className="flex items-start group cursor-pointer" whileHover={{ x: 5 }}>
+                    <motion.div
+                      className="flex items-start group cursor-pointer"
+                      whileHover={{ x: 5 }}
+                    >
                       <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-2xl mr-6">
                         <MapPin className="h-6 w-6 text-white" />
                       </div>
                       <div>
                         <h3 className="text-lg font-medium mb-2">Location</h3>
-                        <p className="text-white/60 font-light">Faisalabad, Pk</p>
-                        <p className="text-sm text-white/40 mt-1">Open to remote collaboration</p>
+                        <p className="text-white/60 font-light">
+                          Faisalabad, Pk
+                        </p>
+                        <p className="text-sm text-white/40 mt-1">
+                          Open to remote collaboration
+                        </p>
                       </div>
                     </motion.div>
                   </div>
@@ -205,32 +254,56 @@ export default function ContactPage() {
 
                 {/* Availability */}
                 <div className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-3xl p-8 border border-white/10">
-                  <h3 className="font-serif text-xl font-light mb-6">Current Availability</h3>
+                  <h3 className="font-serif text-xl font-light mb-6">
+                    Current Availability
+                  </h3>
                   <div className="space-y-4">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-green-400 rounded-full mr-4"></div>
-                      <span className="text-white/80 font-light">Available for new projects</span>
+                      <span className="text-white/80 font-light">
+                        Available for new projects
+                      </span>
                     </div>
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       <Calendar className="w-5 h-5 mr-4 text-white/40" />
                       <span className="text-white/60 text-sm font-light">Next available: January 2024</span>
-                    </div>
+                    </div> */}
                     <div className="flex items-center">
                       <Clock className="w-5 h-5 mr-4 text-white/40" />
-                      <span className="text-white/60 text-sm font-light">Typical response time: 2-4 hours</span>
+                      <span className="text-white/60 text-sm font-light">
+                        Typical response time: 2-4 hours
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Social Links */}
                 <div className="bg-gradient-to-br from-[#1A1A1A] to-[#2A2A2A] rounded-3xl p-8 border border-white/10 flex-1 flex flex-col justify-end min-h-0">
-                  <h3 className="font-serif text-xl font-light mb-6">Connect with me</h3>
+                  <h3 className="font-serif text-xl font-light mb-6">
+                    Connect with me
+                  </h3>
                   <div className="grid grid-cols-2 gap-4 flex-1 content-end">
                     {[
-                      { name: "GITHUB", href: "https://github.com/FahadAliOfficial", color: "from-gray-600 to-gray-800" },
-                      { name: "LINKEDIN", href: "https://www.linkedin.com/in/fahaddali/", color: "from-blue-600 to-blue-800" },
-                      { name: "TWITTER", href: "https://twitter.com/_fahaddali", color: "from-sky-500 to-blue-600" },
-                      { name: "DEV.TO", href: "https://dev.to/fahadaliofficial", color: "from-green-600 to-emerald-700" },
+                      {
+                        name: "GITHUB",
+                        href: "https://github.com/FahadAliOfficial",
+                        color: "from-gray-600 to-gray-800",
+                      },
+                      {
+                        name: "LINKEDIN",
+                        href: "https://www.linkedin.com/in/fahaddali/",
+                        color: "from-blue-600 to-blue-800",
+                      },
+                      {
+                        name: "TWITTER",
+                        href: "https://twitter.com/_fahaddali",
+                        color: "from-sky-500 to-blue-600",
+                      },
+                      {
+                        name: "DEV.TO",
+                        href: "https://dev.to/fahadaliofficial",
+                        color: "from-green-600 to-emerald-700",
+                      },
                     ].map((social, index) => (
                       <motion.a
                         key={social.name}
@@ -249,9 +322,14 @@ export default function ContactPage() {
               </motion.div>
 
               {/* Contact Form */}
-              <motion.div variants={itemVariants} className="lg:col-span-7 flex h-full">
+              <motion.div
+                variants={itemVariants}
+                className="lg:col-span-7 flex h-full"
+              >
                 <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 md:p-12 border border-gray-100 shadow-2xl text-gray-900 w-full flex flex-col h-full min-h-0">
-                  <h2 className="font-serif text-3xl font-light mb-8">Send a Message</h2>
+                  <h2 className="font-serif text-3xl font-light mb-8">
+                    Send a Message
+                  </h2>
 
                   {isSubmitted && (
                     <motion.div
@@ -264,8 +342,12 @@ export default function ContactPage() {
                           <div className="w-3 h-3 bg-white rounded-full"></div>
                         </div>
                         <div>
-                          <p className="font-medium">Thank you for your message!</p>
-                          <p className="text-sm text-green-600">I'll get back to you as soon as possible.</p>
+                          <p className="font-medium">
+                            Thank you for your message!
+                          </p>
+                          <p className="text-sm text-green-600">
+                            I'll get back to you as soon as possible.
+                          </p>
                         </div>
                       </div>
                     </motion.div>
@@ -289,10 +371,16 @@ export default function ContactPage() {
                     </motion.div>
                   )}
 
-                  <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col justify-between min-h-0">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-6 flex-1 flex flex-col justify-between min-h-0"
+                  >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <motion.div variants={itemVariants} className="space-y-2">
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Your Name *
                         </label>
                         <input
@@ -308,7 +396,10 @@ export default function ContactPage() {
                       </motion.div>
 
                       <motion.div variants={itemVariants} className="space-y-2">
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Your Email *
                         </label>
                         <input
@@ -326,7 +417,10 @@ export default function ContactPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <motion.div variants={itemVariants} className="space-y-2">
-                        <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="subject"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Subject
                         </label>
                         <select
@@ -336,8 +430,12 @@ export default function ContactPage() {
                           onChange={handleChange}
                           className="w-full px-4 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
                         >
-                          <option value="Project Inquiry">Project Inquiry</option>
-                          <option value="Job Opportunity">Job Opportunity</option>
+                          <option value="Project Inquiry">
+                            Project Inquiry
+                          </option>
+                          <option value="Job Opportunity">
+                            Job Opportunity
+                          </option>
                           <option value="Collaboration">Collaboration</option>
                           <option value="Consultation">Consultation</option>
                           <option value="Other">Other</option>
@@ -345,7 +443,10 @@ export default function ContactPage() {
                       </motion.div>
 
                       <motion.div variants={itemVariants} className="space-y-2">
-                        <label htmlFor="budget" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="budget"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Project Budget
                         </label>
                         <select
@@ -365,7 +466,10 @@ export default function ContactPage() {
                     </div>
 
                     <motion.div variants={itemVariants} className="space-y-2">
-                      <label htmlFor="timeline" className="block text-sm font-medium text-gray-700">
+                      <label
+                        htmlFor="timeline"
+                        className="block text-sm font-medium text-gray-700"
+                      >
                         Project Timeline
                       </label>
                       <select
@@ -385,7 +489,10 @@ export default function ContactPage() {
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="space-y-2">
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                      <label
+                        htmlFor="message"
+                        className="block text-sm font-medium text-gray-700"
+                      >
                         Your Message *
                       </label>
                       <textarea
@@ -444,7 +551,10 @@ export default function ContactPage() {
                   <div className="mt-8 pt-8 border-t border-gray-200">
                     <p className="text-center text-sm text-gray-500 font-light">
                       Prefer a quick chat? Schedule a{" "}
-                      <a href="#" className="text-gray-800 hover:underline font-medium">
+                      <a
+                        href="#"
+                        className="text-gray-800 hover:underline font-medium"
+                      >
                         15-minute call
                       </a>{" "}
                       to discuss your project.
@@ -457,5 +567,5 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
