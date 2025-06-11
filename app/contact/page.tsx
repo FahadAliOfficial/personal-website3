@@ -20,8 +20,7 @@ import { useIsMobile } from "@/components/ui/use-mobile";
 
 export default function ContactPage() {
   const [mounted, setMounted] = useState(false);
-  const isMobile = useIsMobile();
-  const [formState, setFormState] = useState({
+  const isMobile = useIsMobile();  const [formState, setFormState] = useState({
     name: "",
     email: "",
     message: "",
@@ -32,25 +31,132 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
-
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    message: false,
+  });
   // Fix hydration by ensuring component only renders after mounting
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Validation functions
+  const validateName = (name: string) => {
+    if (!name.trim()) {
+      return "Name is required";
+    }
+    if (name.trim().length < 2) {
+      return "Name must be at least 2 characters long";
+    }
+    if (!/^[a-zA-Z\s'-]+$/.test(name)) {
+      return "Name can only contain letters, spaces, hyphens, and apostrophes";
+    }
+    return "";
+  };
+
+  const validateEmail = (email: string) => {
+    if (!email.trim()) {
+      return "Email is required";
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    return "";
+  };
+
+  const validateMessage = (message: string) => {
+    if (!message.trim()) {
+      return "Message is required";
+    }
+    if (message.trim().length < 10) {
+      return "Message must be at least 10 characters long";
+    }
+    if (message.trim().length > 1000) {
+      return "Message must be less than 1000 characters";
+    }
+    return "";
+  };
+
+  const validateField = (name: string, value: string) => {
+    switch (name) {
+      case "name":
+        return validateName(value);
+      case "email":
+        return validateEmail(value);
+      case "message":
+        return validateMessage(value);
+      default:
+        return "";
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
+    const { name, value } = e.target;
+    
     setFormState({
       ...formState,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Real-time validation for required fields
+    if (name === "name" || name === "email" || name === "message") {
+      const error = validateField(name, value);
+      setErrors({
+        ...errors,
+        [name]: error,
+      });
+    }
   };
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name } = e.target;
+    if (name === "name" || name === "email" || name === "message") {
+      setTouched({
+        ...touched,
+        [name]: true,
+      });
+    }
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate all required fields
+    const nameError = validateName(formState.name);
+    const emailError = validateEmail(formState.email);
+    const messageError = validateMessage(formState.message);
+
+    const newErrors = {
+      name: nameError,
+      email: emailError,
+      message: messageError,
+    };
+
+    const newTouched = {
+      name: true,
+      email: true,
+      message: true,
+    };
+
+    setErrors(newErrors);
+    setTouched(newTouched);
+
+    // Check if there are any validation errors
+    if (nameError || emailError || messageError) {
+      setSubmitError("Please fix the errors above before submitting.");
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError("");
 
@@ -88,6 +194,18 @@ export default function ContactPage() {
         subject: "Project Inquiry",
         budget: "",
         timeline: "",
+      });
+
+      // Reset validation states
+      setErrors({
+        name: "",
+        email: "",
+        message: "",
+      });
+      setTouched({
+        name: false,
+        email: false,
+        message: false,
       });
 
       // Reset success message after 5 seconds
@@ -375,8 +493,7 @@ export default function ContactPage() {
                     onSubmit={handleSubmit}
                     className="space-y-6 flex-1 flex flex-col justify-between min-h-0"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <motion.div variants={itemVariants} className="space-y-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">                      <motion.div variants={itemVariants} className="space-y-2">
                         <label
                           htmlFor="name"
                           className="block text-sm font-medium text-gray-700"
@@ -389,13 +506,25 @@ export default function ContactPage() {
                           name="name"
                           value={formState.name}
                           onChange={handleChange}
-                          required
-                          className="w-full px-4 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
+                          onBlur={handleBlur}
+                          className={`w-full px-4 py-4 rounded-2xl border transition-all bg-white/50 backdrop-blur-sm ${
+                            touched.name && errors.name
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                          }`}
                           placeholder="John Doe"
                         />
-                      </motion.div>
-
-                      <motion.div variants={itemVariants} className="space-y-2">
+                        {touched.name && errors.name && (
+                          <motion.p
+                            className="text-red-600 text-sm mt-1"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            {errors.name}
+                          </motion.p>
+                        )}
+                      </motion.div>                      <motion.div variants={itemVariants} className="space-y-2">
                         <label
                           htmlFor="email"
                           className="block text-sm font-medium text-gray-700"
@@ -408,10 +537,24 @@ export default function ContactPage() {
                           name="email"
                           value={formState.email}
                           onChange={handleChange}
-                          required
-                          className="w-full px-4 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
+                          onBlur={handleBlur}
+                          className={`w-full px-4 py-4 rounded-2xl border transition-all bg-white/50 backdrop-blur-sm ${
+                            touched.email && errors.email
+                              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                              : "border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                          }`}
                           placeholder="john@example.com"
                         />
+                        {touched.email && errors.email && (
+                          <motion.p
+                            className="text-red-600 text-sm mt-1"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            {errors.email}
+                          </motion.p>
+                        )}
                       </motion.div>
                     </div>
 
@@ -486,33 +629,51 @@ export default function ContactPage() {
                         <option value="6+ months">6+ months</option>
                         <option value="Just exploring">Just exploring</option>
                       </select>
-                    </motion.div>
-
-                    <motion.div variants={itemVariants} className="space-y-2">
+                    </motion.div>                    <motion.div variants={itemVariants} className="space-y-2">
                       <label
                         htmlFor="message"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        Your Message *
+                        Your Message * ({formState.message.length}/1000)
                       </label>
                       <textarea
                         id="message"
                         name="message"
                         value={formState.message}
                         onChange={handleChange}
-                        required
+                        onBlur={handleBlur}
                         rows={6}
-                        className="w-full px-4 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-all bg-white/50 backdrop-blur-sm resize-none"
+                        className={`w-full px-4 py-4 rounded-2xl border transition-all bg-white/50 backdrop-blur-sm resize-none ${
+                          touched.message && errors.message
+                            ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                            : "border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent"
+                        }`}
                         placeholder="Tell me about your project, goals, and how I can help..."
+                        maxLength={1000}
                       ></textarea>
-                    </motion.div>
-
-                    <motion.button
+                      {touched.message && errors.message && (
+                        <motion.p
+                          className="text-red-600 text-sm mt-1"
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {errors.message}
+                        </motion.p>
+                      )}
+                    </motion.div>                    <motion.button
                       type="submit"
                       className="w-full bg-gradient-to-r from-gray-900 to-gray-700 text-white px-8 py-4 rounded-2xl text-base hover:from-gray-800 hover:to-gray-600 transition-all font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                       whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      disabled={isSubmitting}
+                      whileTap={{ scale: 0.98 }}                      disabled={
+                        isSubmitting ||
+                        !formState.name ||
+                        !formState.email ||
+                        !formState.message ||
+                        !!errors.name ||
+                        !!errors.email ||
+                        !!errors.message
+                      }
                       variants={itemVariants}
                     >
                       {isSubmitting ? (
