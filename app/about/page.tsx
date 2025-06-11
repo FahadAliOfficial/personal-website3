@@ -12,6 +12,8 @@ import {
   Coffee,
   Code,
   Heart,
+  Award,
+  ExternalLink,
 } from "lucide-react";
 import MouseFollower from "@/components/mouse-follower";
 import { useIsMobile } from "@/components/ui/use-mobile";
@@ -21,6 +23,7 @@ export default function AboutPage() {
   const isMobile = useIsMobile();
   const [activeSection, setActiveSection] = useState("story");
   const [showAllSkills, setShowAllSkills] = useState(false);
+  const [showAllCertifications, setShowAllCertifications] = useState(false);
 
   // Fix hydration by ensuring component only renders after mounting
   useEffect(() => {
@@ -53,6 +56,92 @@ export default function AboutPage() {
       items: ["Git", "VSCode", "Colab", "Ubuntu", "Docker (basic)"],
       color: "from-purple-500 to-fuchsia-500",
     },
+  ];  const certifications = [
+    {
+      title: "Machine Learning Specialization",
+      issuer: "Stanford University & DeepLearning.AI (Coursera)",
+      date: "July 27, 2024",
+      description:
+        "Comprehensive 3-course specialization taught by Andrew Ng covering supervised learning (linear/logistic regression, neural networks, decision trees), unsupervised learning (clustering, anomaly detection), recommender systems, and reinforcement learning. Built ML models with NumPy, scikit-learn, and TensorFlow. Achieved 100% grade in first two courses and 98.80% in the final course.",
+      status: "completed",
+      credentialId: "1EE75FLL5DOJ",
+      certificateUrl: "https://www.coursera.org/account/accomplishments/specialization/certificate/1EE75FLL5DOJ",
+    },
+    {
+      title: "Deep Learning Specialization",
+      issuer: "DeepLearning.AI (Coursera)",
+      date: "In Progress",
+      description:
+        "5-course specialization covering neural networks, deep learning optimization, CNN, and sequence models. Currently completed 2/5 courses.",
+      status: "in-progress",
+      credentialId: "DL_SPEC_PROG",
+      certificateUrl: "",
+    },    {
+      title: "Google Data Analytics Professional Certificate",
+      issuer: "Google (Coursera)",
+      date: "June 2025",
+      description:
+        "Comprehensive 8-course professional certificate program covering data foundations, preparation, processing, analysis, visualization, and advanced R programming. Mastered spreadsheets, SQL databases, Tableau dashboards, R programming with tidyverse, and statistical analysis. Completed hands-on projects including bike-share case study with complete data lifecycle from collection to actionable insights.",
+      status: "completed",
+      credentialId: "TV861YGE7PRV",
+      certificateUrl: "https://www.coursera.org/account/accomplishments/specialization/certificate/TV861YGE7PRV",
+    },    {
+      title: "Python for Data Science, AI & Development",
+      issuer: "IBM (Coursera)",
+      date: "May 31, 2025",
+      description:
+        "Comprehensive 25-hour Python programming course covering variables, data structures, branching, loops, functions, and object-oriented programming. Mastered Python libraries including Pandas, NumPy, and Beautiful Soup for data analysis, manipulation, and web scraping. Developed proficiency in Jupyter Notebooks, APIs, data collection/import/export, and automation scripting. Achieved 94% grade with hands-on projects in data science applications.",
+      status: "completed",
+      credentialId: "LWFA2RSZGE6H",
+      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/LWFA2RSZGE6H",
+    },    {
+      title: "Python Data Structures",
+      issuer: "University of Michigan (Coursera)",
+      date: "May 15, 2025",
+      description:
+        "Comprehensive 18-hour course covering principles of data structures and their practical applications. Mastered file I/O operations for reading and writing data, Python dictionaries for key/value pair storage, and tuples for multi-step tasks including sorting and looping. Developed proficiency in data manipulation, import/export, programming principles, and development environments. Achieved 96.71% grade with hands-on projects in data structure implementation.",
+      status: "completed",
+      credentialId: "56PPJ8PPB6ZQ",
+      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/56PPJ8PPB6ZQ",    },
+    {
+      title: "Programming for Everybody (Getting Started with Python)",
+      issuer: "University of Michigan (Coursera)",
+      date: "September 7, 2023",
+      description:
+        "Comprehensive 18-hour foundational Python programming course covering Python installation, basic syntax, variables for storing and calculating information, and core programming tools including functions and loops. Developed skills in development environments, computational thinking, scripting, and programming principles. Achieved 95.77% grade in this highly-rated course with 3.3M+ students enrolled.",
+      status: "completed",
+      credentialId: "NKP4SE52GWDT",
+      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/NKP4SE52GWDT",    },
+    {
+      title: "Microsoft AI & ML Engineering Professional Certificate",
+      issuer: "Microsoft (Coursera)",
+      date: "In Progress",
+      description:
+        "Comprehensive 5-course professional certificate program (178 total hours) focusing on AI & ML infrastructure design, algorithms and techniques, intelligent troubleshooting agents, and Microsoft Azure workflows. Covering data processing, MLOps, reinforcement learning, prompt engineering, and advanced AI deployment. Includes hands-on capstone project developing real-world AI solutions. Prepares for Microsoft Azure AI Engineer Associate AI-102 certification.",
+      status: "in-progress",
+      credentialId: "",
+      certificateUrl: "",
+    },
+    {
+      title: "AI For Everyone",
+      issuer: "DeepLearning.AI (Coursera)",
+      date: "June 29, 2024",
+      description:
+        "Comprehensive 6-hour non-technical course covering artificial intelligence, machine learning, deep learning, and artificial neural networks. Developed strategic thinking for AI implementation, data ethics understanding, and market opportunity assessment. Gained skills in needs assessment, engineering management, business ethics, and team building for AI projects. Achieved 98.12% grade in this highly-rated course with 1.9M+ students enrolled.",
+      status: "completed",
+      credentialId: "VMPAHLAJUR8P",
+      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/VMPAHLAJUR8P",
+    },
+    // {
+    //   title: "Design & Content Creation Courses",
+    //   issuer: "Coursera Project Network",
+    //   date: "2024",
+    //   description:
+    //     "Completed multiple design projects including Canva for digital course collateral and professional resume building.",
+    //   status: "completed",
+    //   credentialId: "DESIGN_2024",
+    //   certificateUrl: "https://coursera.org/verify/DESIGN_2024",
+    // },
   ];
 
   // const experience = [
@@ -141,12 +230,12 @@ export default function AboutPage() {
       },
     },
   };
-
   const navigationSections = [
     { id: "story", label: "My Story" },
     { id: "skills", label: "Skills" },
     { id: "experience", label: "Experience" },
-    { id: "philosophy", label: "Philosophy" },
+    { id: "certifications", label: "Certifications" },
+    { id: "values", label: "Values" },
   ];
 
   // Prevent hydration mismatch by not rendering until mounted
@@ -244,7 +333,7 @@ export default function AboutPage() {
                       </div>
                       <div className="text-xs text-white/60">Experience</div>
                     </div>
-                  </div>
+                  </div>{" "}
                   <div className="flex items-center">
                     <Code className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-green-400" />
                     <div>
@@ -252,6 +341,15 @@ export default function AboutPage() {
                         20+ Projects
                       </div>
                       <div className="text-xs text-white/60">Completed</div>
+                    </div>
+                  </div>{" "}
+                  <div className="flex items-center">
+                    <Award className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-yellow-400" />
+                    <div>
+                      <div className="text-xs sm:text-sm font-medium">
+                        17+ Certifications
+                      </div>
+                      <div className="text-xs text-white/60">Earned</div>
                     </div>
                   </div>
                   <div className="flex items-center">
@@ -289,11 +387,11 @@ export default function AboutPage() {
                 >
                   {" "}
                   <div className="bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] rounded-2xl p-2 sm:p-3 border border-white/10">
-                    <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+                    <div className="flex justify-center gap-1 sm:gap-2 md:gap-3 flex-wrap sm:flex-nowrap">
                       {navigationSections.map((section) => (
                         <motion.button
                           key={section.id}
-                          className={`px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 rounded-lg sm:rounded-xl transition-all font-light text-sm sm:text-base whitespace-nowrap ${
+                          className={`px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2.5 lg:px-6 lg:py-3 rounded-lg sm:rounded-xl transition-all font-light text-xs sm:text-sm md:text-base whitespace-nowrap flex-shrink-0 ${
                             activeSection === section.id
                               ? "bg-white text-gray-900 font-medium shadow-lg"
                               : "hover:bg-white/10 text-white/80 hover:text-white"
@@ -471,14 +569,106 @@ export default function AboutPage() {
                     </div>
                   </motion.div>
                 )}
-                {activeSection === "philosophy" && (
+                {activeSection === "certifications" && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
                     <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-4 sm:mb-6 lg:mb-8">
-                      My Philosophy
+                      Certifications & Learning
+                    </h2>
+                    <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:gap-6">
+                      {(showAllCertifications
+                        ? certifications
+                        : certifications.slice(0, 3)
+                      ).map((cert, index) => (
+                        <motion.div
+                          key={cert.title}
+                          className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-lg border border-gray-100"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                        >                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4">
+                            <div className="flex-1">
+                              <div className="flex items-center mb-2">
+                                <Award className="w-5 h-5 mr-2 text-yellow-500" />
+                                <h3 className="font-serif text-lg sm:text-xl font-medium text-gray-900">
+                                  {cert.title}
+                                </h3>
+                              </div>
+                              <p className="text-gray-600 font-medium text-sm sm:text-base mb-1">
+                                {cert.issuer}
+                              </p>
+                              <p className="text-gray-700 text-xs sm:text-sm font-light mb-3">
+                                {cert.description}
+                              </p>
+                              
+                              {/* View Certificate Button - Only show for completed certs with URL */}
+                              {cert.status === "completed" && cert.certificateUrl && (
+                                <motion.a
+                                  href={cert.certificateUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium transition-colors"
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.98 }}
+                                >
+                                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                                  View Certificate
+                                </motion.a>
+                              )}
+                            </div>
+                            <div className="flex flex-col items-start sm:items-end mt-2 sm:mt-0 sm:ml-4">
+                              <div
+                                className={`text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-1 rounded-full w-fit mb-1 ${
+                                  cert.status === "completed"
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-blue-100 text-blue-700"
+                                }`}
+                              >
+                                {cert.status === "completed"
+                                  ? "Completed"
+                                  : "In Progress"}
+                              </div>
+                              <div className="text-xs sm:text-sm text-gray-500">
+                                {cert.date}
+                              </div>
+                              {cert.credentialId && (
+                                <div className="text-xs text-gray-400 mt-1">
+                                  ID: {cert.credentialId}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Toggle Button */}
+                    {certifications.length > 3 && (
+                      <div className="mt-4 sm:mt-6 text-center">
+                        <button
+                          onClick={() =>
+                            setShowAllCertifications(!showAllCertifications)
+                          }
+                          className="text-blue-600 hover:underline font-medium text-sm sm:text-base"
+                        >
+                          {showAllCertifications ? "Show Less" : "Show More"}
+                        </button>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+                {activeSection === "values" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {" "}
+                    <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light mb-4 sm:mb-6 lg:mb-8">
+                      My Values & Approach
                     </h2>
                     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
                       {" "}
