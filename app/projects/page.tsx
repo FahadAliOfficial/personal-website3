@@ -994,7 +994,7 @@ export default function ProjectsPage() {
 
                           <div className="space-y-6">
                             {/* Project Stats */}
-                            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                            {/*<div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                               <h3 className="font-serif text-lg font-medium mb-4">
                                 Expectations
                               </h3>
@@ -1014,6 +1014,7 @@ export default function ProjectsPage() {
                                 ))}
                               </div>
                             </div>
+                            */}
 
                             {/* Project Info */}
                             <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
