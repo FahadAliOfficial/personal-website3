@@ -13,7 +13,16 @@ import {
   Send,
   Calendar,
   Clock,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import emailjs from "@emailjs/browser";
 import MouseFollower from "@/components/mouse-follower";
 import { useIsMobile } from "@/components/ui/use-mobile";
@@ -27,10 +36,10 @@ export default function ContactPage() {
     subject: "Project Inquiry",
     budget: "",
     timeline: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState("");
+  });  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -149,16 +158,14 @@ export default function ContactPage() {
     };
 
     setErrors(newErrors);
-    setTouched(newTouched);
-
-    // Check if there are any validation errors
+    setTouched(newTouched);    // Check if there are any validation errors
     if (nameError || emailError || messageError) {
-      setSubmitError("Please fix the errors above before submitting.");
+      setErrorMessage("Please fix the errors above before submitting.");
+      setShowErrorModal(true);
       return;
     }
 
     setIsSubmitting(true);
-    setSubmitError("");
 
     try {
       // Initialize EmailJS (you'll need to sign up at https://www.emailjs.com/)
@@ -182,11 +189,9 @@ export default function ContactPage() {
         timeline: formState.timeline,
         to_email:
           process.env.NEXT_PUBLIC_CONTACT_EMAIL || "your-email@example.com",
-      };
+      };      await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
-
-      setIsSubmitted(true);
+      setShowSuccessModal(true);
       setFormState({
         name: "",
         email: "",
@@ -207,16 +212,12 @@ export default function ContactPage() {
         email: false,
         message: false,
       });
-
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
     } catch (error) {
       console.error("Error sending email:", error);
-      setSubmitError(
+      setErrorMessage(
         "Failed to send message. Please try again or contact me directly."
       );
+      setShowErrorModal(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -444,50 +445,9 @@ export default function ContactPage() {
                 variants={itemVariants}
                 className="lg:col-span-7 flex h-full"
               >
-                <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 md:p-12 border border-gray-100 shadow-2xl text-gray-900 w-full flex flex-col h-full min-h-0">
-                  <h2 className="font-serif text-3xl font-light mb-8">
+                <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 md:p-12 border border-gray-100 shadow-2xl text-gray-900 w-full flex flex-col h-full min-h-0">                  <h2 className="font-serif text-3xl font-light mb-8">
                     Send a Message
                   </h2>
-
-                  {isSubmitted && (
-                    <motion.div
-                      className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 px-6 py-4 rounded-2xl mb-8"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      <div className="flex items-center">
-                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                          <div className="w-3 h-3 bg-white rounded-full"></div>
-                        </div>
-                        <div>
-                          <p className="font-medium">
-                            Thank you for your message!
-                          </p>
-                          <p className="text-sm text-green-600">
-                            I'll get back to you as soon as possible.
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {submitError && (
-                    <motion.div
-                      className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-800 px-6 py-4 rounded-2xl mb-8"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      <div className="flex items-center">
-                        <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center mr-3">
-                          <div className="w-3 h-3 bg-white rounded-full"></div>
-                        </div>
-                        <div>
-                          <p className="font-medium">Error sending message</p>
-                          <p className="text-sm text-red-600">{submitError}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
 
                   <form
                     onSubmit={handleSubmit}
@@ -723,10 +683,59 @@ export default function ContactPage() {
                   </div>
                 </div>
               </motion.div>
-            </div>
-          </motion.div>
+            </div>          </motion.div>
         </div>
-      </div>
+      </div>      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="bg-white text-gray-900 border-0 shadow-2xl max-w-sm sm:max-w-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-auto">
+          <DialogHeader>
+            <div className="flex items-center justify-center mb-4 sm:mb-6">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+            </div>
+            <DialogTitle className="text-center text-xl sm:text-2xl font-serif font-light px-2">
+              Message Sent Successfully!
+            </DialogTitle>
+            <DialogDescription className="text-center text-gray-600 mt-3 sm:mt-4 text-sm sm:text-base px-2">
+              Thank you for reaching out! I've received your message and will get back to you within 24 hours.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center mt-6 sm:mt-8">
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="bg-gradient-to-r from-gray-900 to-gray-700 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl hover:from-gray-800 hover:to-gray-600 transition-all font-medium text-sm sm:text-base w-full sm:w-auto"
+            >
+              Close
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>      {/* Error Modal */}
+      <Dialog open={showErrorModal} onOpenChange={setShowErrorModal}>
+        <DialogContent className="bg-white text-gray-900 border-0 shadow-2xl max-w-sm sm:max-w-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-auto">
+          <DialogHeader>
+            <div className="flex items-center justify-center mb-4 sm:mb-6">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+                <XCircle className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+            </div>
+            <DialogTitle className="text-center text-xl sm:text-2xl font-serif font-light px-2">
+              Message Failed to Send
+            </DialogTitle>
+            <DialogDescription className="text-center text-gray-600 mt-3 sm:mt-4 text-sm sm:text-base px-2">
+              {errorMessage}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center mt-6 sm:mt-8">
+            <button
+              onClick={() => setShowErrorModal(false)}
+              className="bg-gradient-to-r from-gray-900 to-gray-700 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl hover:from-gray-800 hover:to-gray-600 transition-all font-medium text-sm sm:text-base w-full sm:w-auto"
+            >
+              Try Again
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
