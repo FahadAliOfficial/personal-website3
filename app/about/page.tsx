@@ -56,7 +56,8 @@ export default function AboutPage() {
       items: ["Git", "VSCode", "Colab", "Ubuntu", "Docker (basic)"],
       color: "from-purple-500 to-fuchsia-500",
     },
-  ];  const certifications = [
+  ];
+  const certifications = [
     {
       title: "Machine Learning Specialization",
       issuer: "Stanford University & DeepLearning.AI (Coursera)",
@@ -76,7 +77,8 @@ export default function AboutPage() {
       status: "in-progress",
       credentialId: "DL_SPEC_PROG",
       certificateUrl: "",
-    },    {
+    },
+    {
       title: "Google Data Analytics Professional Certificate",
       issuer: "Google (Coursera)",
       date: "June 2025",
@@ -85,7 +87,8 @@ export default function AboutPage() {
       status: "completed",
       credentialId: "TV861YGE7PRV",
       certificateUrl: "https://www.coursera.org/account/accomplishments/specialization/certificate/TV861YGE7PRV",
-    },    {
+    },
+    {
       title: "Python for Data Science, AI & Development",
       issuer: "IBM (Coursera)",
       date: "May 31, 2025",
@@ -94,7 +97,8 @@ export default function AboutPage() {
       status: "completed",
       credentialId: "LWFA2RSZGE6H",
       certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/LWFA2RSZGE6H",
-    },    {
+    },
+    {
       title: "Python Data Structures",
       issuer: "University of Michigan (Coursera)",
       date: "May 15, 2025",
@@ -102,7 +106,8 @@ export default function AboutPage() {
         "Comprehensive 18-hour course covering principles of data structures and their practical applications. Mastered file I/O operations for reading and writing data, Python dictionaries for key/value pair storage, and tuples for multi-step tasks including sorting and looping. Developed proficiency in data manipulation, import/export, programming principles, and development environments. Achieved 96.71% grade with hands-on projects in data structure implementation.",
       status: "completed",
       credentialId: "56PPJ8PPB6ZQ",
-      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/56PPJ8PPB6ZQ",    },
+      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/56PPJ8PPB6ZQ",
+    },
     {
       title: "Programming for Everybody (Getting Started with Python)",
       issuer: "University of Michigan (Coursera)",
@@ -111,7 +116,8 @@ export default function AboutPage() {
         "Comprehensive 18-hour foundational Python programming course covering Python installation, basic syntax, variables for storing and calculating information, and core programming tools including functions and loops. Developed skills in development environments, computational thinking, scripting, and programming principles. Achieved 95.77% grade in this highly-rated course with 3.3M+ students enrolled.",
       status: "completed",
       credentialId: "NKP4SE52GWDT",
-      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/NKP4SE52GWDT",    },
+      certificateUrl: "https://www.coursera.org/account/accomplishments/certificate/NKP4SE52GWDT",
+    },
     {
       title: "Microsoft AI & ML Engineering Professional Certificate",
       issuer: "Microsoft (Coursera)",
@@ -589,7 +595,8 @@ export default function AboutPage() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
-                        >                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4">
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4">
                             <div className="flex-1">
                               <div className="flex items-center mb-2">
                                 <Award className="w-5 h-5 mr-2 text-yellow-500" />
@@ -603,7 +610,7 @@ export default function AboutPage() {
                               <p className="text-gray-700 text-xs sm:text-sm font-light mb-3">
                                 {cert.description}
                               </p>
-                              
+
                               {/* View Certificate Button - Only show for completed certs with URL */}
                               {cert.status === "completed" && cert.certificateUrl && (
                                 <motion.a

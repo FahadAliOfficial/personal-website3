@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Allow all crawlers access to all content
+Disallow:
+
+# Sitemap location
+Sitemap: https://fahadali.dev/sitemap.xml
+
+# Important pages for crawlers
+Allow: /
+Allow: /about
+Allow: /projects
+Allow: /contact
+
+# Optional: Block any admin or private areas (if you have any)
+# Disallow: /admin
+# Disallow: /private
